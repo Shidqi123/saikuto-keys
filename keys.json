@@ -1,7 +1,10 @@
 {
   "keys": [
-    "SAIKUTO-KEY-ZZP18G",
-    "SAIKUTO-KEY-D50XL2",
-    "SAIKUTO-KEY-ABC123"
+    { "key": "SAIKUTO-123456", "usedBy": null },
+    { "key": "SAIKUTO-654321", "usedBy": null },
+    { "key": "SAIKUTO-111111", "usedBy": null },
+    { "key": "SAIKUTO-222222", "usedBy": null },
+    { "key": "SAIKUTO-333333", "usedBy": null }
   ]
 }
+
