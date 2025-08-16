@@ -1,4 +1,4 @@
-const keysURL = "https://raw.githubusercontent.com/Shidqi123/saikuto-keys/main/keys.json";
+const keysURL = "https://raw.githubusercontent.com/Shidqi123/saikuto-keys/refs/heads/main/keys.json";
 
 async function login() {
     const keyInput = document.getElementById("key").value.trim();
