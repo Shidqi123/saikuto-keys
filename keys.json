@@ -1,9 +1,9 @@
 {
   "keys": [
-    { "key": "SAIKUTO-123456", "usedBy": null },
-    { "key": "SAIKUTO-654321", "usedBy": null },
-    { "key": "SAIKUTO-111111", "usedBy": null },
-    { "key": "SAIKUTO-222222", "usedBy": null },
-    { "key": "SAIKUTO-333333", "usedBy": null }
+    { "key": "ABCD-1234", "dev": "Saikuto" },
+    { "key": "WXYZ-5678", "dev": "Raka" },
+    { "key": "SAIKUTO-9999", "dev": "Shidqi" },
+    { "key": "TEST-0001", "dev": "Tester" }
   ]
 }
+
