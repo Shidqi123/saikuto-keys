@@ -1,9 +1,7 @@
 {
   "keys": [
-    { "key": "ABCD-1234", "dev": "Saikuto" },
-    { "key": "WXYZ-5678", "dev": "Raka" },
-    { "key": "SAIKUTO-9999", "dev": "Shidqi" },
-    { "key": "TEST-0001", "dev": "Tester" }
+    { "key": "ABCD-1234", "dev": "Saikuto", "username": "saikuto", "password": "1234" },
+    { "key": "WXYZ-5678", "dev": "Raka", "username": "raka", "password": "5678" },
+    { "key": "SAIKUTO-9999", "dev": "Shidqi", "username": "shidqi", "password": "9999" }
   ]
 }
-
