@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Success</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+  <div class="success-box">
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Login Successfull Saikuto Injector ✅</h1>
+    <p>Mengarahkan ke Headtrick...</p>
+  </div>
+  <script>
+    setTimeout(() => {
+      window.location.href = "headtrick.html";
+    }, 3000);
+  </script>
+  <script src="particles.js"></script>
+</body>
+</html>
