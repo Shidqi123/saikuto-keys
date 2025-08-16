@@ -1,8 +1,5 @@
-// keys.js
-const validKeys = {
-  keys: [
+  keys:
     "ABC123-KEY-TEST",
     "XYZ789-KEY-TRIAL",
     "SAIKUTO-HEADTRICK-001"
-  ]
 };
