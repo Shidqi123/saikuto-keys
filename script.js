@@ -3,7 +3,7 @@ async function login() {
   const message = document.getElementById("message");
 
   try {
-    const response = await fetch("https://raw.githubusercontent.com/Shidqi123/saikuto-keys/main/keys.json");
+    const response = await fetch("https://raw.githubusercontent.com/Shidqi123/saikuto-keys/refs/heads/main/keys.json");
     const data = await response.json();
 
     if (data.keys.includes(keyInput)) {
