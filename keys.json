@@ -1,10 +1,17 @@
 {
-  "keys": [
-    { "key": "SAIKUTO-123456", "usedBy": null },
-    { "key": "SAIKUTO-654321", "usedBy": null },
-    { "key": "SAIKUTO-111111", "usedBy": null },
-    { "key": "SAIKUTO-222222", "usedBy": null },
-    { "key": "SAIKUTO-333333", "usedBy": null }
-  ]
+  "S4IKUT0-123": {
+    "valid": true,
+    "expires": "2025-12-31",
+    "device": null
+  },
+  "VIP-HEADSHOT-999": {
+    "valid": true,
+    "expires": "2026-01-15",
+    "device": null
+  },
+  "FREEFIRE-TRICK-777": {
+    "valid": true,
+    "expires": "2025-09-01",
+    "device": null
+  }
 }
-
