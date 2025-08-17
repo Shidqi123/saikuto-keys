@@ -35,30 +35,29 @@
 
   <script src="particles.js"></script>
   <script>
-    <script>
-  // Tampilkan user yang login
-  document.addEventListener("DOMContentLoaded", () => {
-    const user = localStorage.getItem('username');
-    if (user) {
-      document.getElementById('welcomeUser').innerText = "Logged in as: " + user;
+    // Tampilkan user yang login
+    document.addEventListener("DOMContentLoaded", () => {
+      const user = localStorage.getItem('username');
+      if (user) {
+        document.getElementById('welcomeUser').innerText = "Logged in as: " + user;
+      }
+
+      // 🔥 Redirect otomatis ke headtrick.html setelah 3 detik
+      setTimeout(() => {
+        window.location.href = "headtrick.html";
+      }, 3000);
+    });
+
+    // Logout function
+    function logout() {
+      // Hapus semua data login, termasuk key
+      localStorage.removeItem('username');
+      localStorage.removeItem('password');
+      localStorage.removeItem('loggedInKey'); // biar user wajib login lagi
+
+      // Arahkan balik ke login (index.html)
+      window.location.href = "index.html";
     }
-
-    // 🔥 Redirect otomatis ke headtrick.html setelah 3 detik
-    setTimeout(() => {
-      window.location.href = "headtrick.html";
-    }, 3000);
-  });
-
-  // Logout function
-  function logout() {
-    // Hapus semua data login, termasuk key
-    localStorage.removeItem('username');
-    localStorage.removeItem('password');
-    localStorage.removeItem('loggedInKey'); // biar user wajib login lagi
-
-    // Arahkan balik ke login (index.html)
-    window.location.href = "index.html";
-  }
   </script>
 </body>
 </html>
