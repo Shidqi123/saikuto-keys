@@ -1,100 +1,60 @@
-// Ambil elemen message sekali aja
-const message = document.getElementById('message');
+// Ambil referensi database
+const db = firebase.database();
+const messageEl = document.getElementById("message");
 
-// Fungsi cek Key dari Firebase
-async function checkKey() {
-  const inputKey = document.getElementById('keyInput').value.trim();
+// Fungsi untuk cek key
+function checkKey() {
+  const inputKey = document.getElementById("keyInput").value.trim();
 
   if (!inputKey) {
-    message.style.color = "red";
-    message.innerText = "Key wajib diisi!";
+    messageEl.innerText = "Masukkan key terlebih dahulu!";
+    messageEl.style.color = "red";
     return;
   }
 
-  try {
-    // Cek apakah key ada di database
-    const snapshot = await db.ref("keys/" + inputKey).once("value");
-
+  db.ref("keys/" + inputKey).once("value").then(snapshot => {
     if (snapshot.exists()) {
       const keyData = snapshot.val();
+      const deviceId = getDeviceId();
 
-      // Jika key sudah pernah dipakai di device lain
-      if (keyData.deviceId && keyData.deviceId !== getDeviceId()) {
-        message.style.color = "red";
-        message.innerText = "Key sudah dipakai di device lain!";
-        return;
-      }
-
-      // Kalau key belum dipakai, lock ke device ini
+      // Jika key belum dipakai device manapun → lock ke device ini
       if (!keyData.deviceId) {
-        await db.ref("keys/" + inputKey).update({
-          deviceId: getDeviceId()
-        });
+        db.ref("keys/" + inputKey).update({ deviceId: deviceId });
+        localStorage.setItem("key", inputKey);
+        localStorage.setItem("deviceId", deviceId);
+
+        messageEl.innerText = "Key valid! Silakan buat user.";
+        messageEl.style.color = "lime";
+        document.getElementById("keyBox").style.display = "none";
+        document.getElementById("registerBox").style.display = "block";
+
+      // Jika key sudah dipakai device lain → tolak
+      } else if (keyData.deviceId === deviceId) {
+        messageEl.innerText = "Selamat datang kembali!";
+        messageEl.style.color = "lime";
+        document.getElementById("keyBox").style.display = "none";
+        document.getElementById("userLoginBox").style.display = "block";
+      } else {
+        messageEl.innerText = "Key ini sudah dipakai di device lain!";
+        messageEl.style.color = "red";
       }
-
-      message.style.color = "lime";
-      message.innerText = "Key valid! Silakan buat Username & Password.";
-
-      // Simpan key di localStorage
-      localStorage.setItem("usedKey", inputKey);
-
-      // Tampilkan form registrasi
-      document.getElementById("registerBox").style.display = "block";
-      document.getElementById("keyBox").style.display = "none";
 
     } else {
-      message.style.color = "red";
-      message.innerText = "Key salah atau tidak valid!";
+      messageEl.innerText = "Key tidak valid!";
+      messageEl.style.color = "red";
     }
-  } catch (error) {
-    console.error(error);
-    message.style.color = "orange";
-    message.innerText = "Gagal memeriksa key!";
-  }
+  }).catch(err => {
+    messageEl.innerText = "Error cek key: " + err;
+    messageEl.style.color = "red";
+  });
 }
 
-// Fungsi simpan user & password
-function registerUser() {
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value.trim();
-
-  if (username && password) {
-    localStorage.setItem('username', username);
-    localStorage.setItem('password', password);
-
-    message.style.color = 'lime';
-    message.innerText = 'Registrasi berhasil! Sekarang login dengan user.';
-
-    document.getElementById('registerBox').style.display = 'none';
-    document.getElementById('userLoginBox').style.display = 'block';
-  } else {
-    message.style.color = 'red';
-    message.innerText = 'Username dan password wajib diisi!';
-  }
-}
-
-// Fungsi login user
-function loginUser() {
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value.trim();
-
-  const savedUser = localStorage.getItem('username');
-  const savedPass = localStorage.getItem('password');
-
-  if (username === savedUser && password === savedPass) {
-    message.style.color = 'lime';
-    message.innerText = 'Login berhasil!';
-    setTimeout(() => {
-      window.location.href = "success.html";
-    }, 1000);
-  } else {
-    message.style.color = 'red';
-    message.innerText = 'Username atau password salah!';
-  }
-}
-
-// Fungsi untuk lock key ke 1 device
+// Fungsi buat deviceId unik dari browser
 function getDeviceId() {
-  // bikin fingerprint simple dari userAgent
-  return btoa(navigator.userAgent).substr(0, 20);
+  let id = localStorage.getItem("deviceId");
+  if (!id) {
+    id = "dev-" + Math.random().toString(36).substr(2, 12);
+    localStorage.setItem("deviceId", id);
+  }
+  return id;
 }
