@@ -7,22 +7,10 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(reg => {
-    if (reg.waiting) {
-      reg.waiting.postMessage("SKIP_WAITING");
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
     }
-    reg.addEventListener("updatefound", () => {
-      const newWorker = reg.installing;
-      newWorker.addEventListener("statechange", () => {
-        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-          newWorker.postMessage("SKIP_WAITING");
-        }
-      });
-    });
-  });
-}
-</script>
+  </script>
 </head>
 <body>
 
@@ -58,7 +46,31 @@ if ('serviceWorker' in navigator) {
     <div class="message" id="message"></div>
   </div>
 
-  <!-- Jangan load keys.json langsung, cukup lewat fetch() di script.js -->
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Konfigurasi Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKI71A-pb1E4qx8aso2-j3W_lS5q8ny6g",
+      authDomain: "saikuto-76536.firebaseapp.com",
+      databaseURL: "https://saikuto-76536-default-rtdb.firebaseio.com",
+      projectId: "saikuto-76536",
+      storageBucket: "saikuto-76536.firebasestorage.app",
+      messagingSenderId: "671219937980",
+      appId: "1:671219937980:web:e5b285c8a0100cbfd916b9",
+      measurementId: "G-PPTYKPQDLE"
+    };
+
+    // Inisialisasi Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    const db = firebase.database();
+  </script>
+
+  <!-- Script utama -->
   <script src="script.js"></script>
   <script src="particles.js"></script>
 </body>
