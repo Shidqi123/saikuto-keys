@@ -24,7 +24,7 @@ function checkKey() {
         // simpan key hanya sekali (untuk validasi saat register)
         localStorage.setItem("tempKey", key);
       } else {
-        message.innerText = "❌ Key salah atau tidak ditemukan!";
+        message.innerText = "❌ Key sudah pernah di gunakan!";
         message.style.color = "red";
       }
     })
