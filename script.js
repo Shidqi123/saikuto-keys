@@ -1,4 +1,6 @@
-// ============== LOGIN DENGAN KEY ==============
+// script.js
+
+// Fungsi cek key di Firebase
 function checkKey() {
   const key = document.getElementById("keyInput").value.trim();
   const message = document.getElementById("message");
@@ -12,24 +14,15 @@ function checkKey() {
   firebase.database().ref("keys/" + key).once("value")
     .then(snapshot => {
       if (snapshot.exists()) {
-        const data = snapshot.val();
+        message.innerText = "✅ Key valid, silakan buat Username & Password";
+        message.style.color = "lightgreen";
 
-        // Kalau key sudah dipakai → langsung ke login user
-        if (data.user) {
-          message.innerText = "Key ini sudah dipakai, silakan login dengan Username + Password";
-          message.style.color = "orange";
-          document.getElementById("keyBox").style.display = "none";
-          document.getElementById("userLoginBox").style.display = "block";
-        } else {
-          // Kalau key baru → tampilkan form registrasi user
-          message.innerText = "Key valid, silakan buat Username & Password";
-          message.style.color = "lightgreen";
-          document.getElementById("keyBox").style.display = "none";
-          document.getElementById("registerBox").style.display = "block";
+        // tampilkan form registrasi user
+        document.getElementById("keyBox").style.display = "none";
+        document.getElementById("registerBox").style.display = "block";
 
-          // simpan key ke localStorage sementara
-          localStorage.setItem("tempKey", key);
-        }
+        // simpan key hanya sekali (untuk validasi saat register)
+        localStorage.setItem("tempKey", key);
       } else {
         message.innerText = "❌ Key salah atau tidak ditemukan!";
         message.style.color = "red";
@@ -42,84 +35,71 @@ function checkKey() {
     });
 }
 
-// ============== REGISTRASI USER BARU ==============
+// Fungsi buat user baru setelah key valid
 function registerUser() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
   const key = localStorage.getItem("tempKey");
   const message = document.getElementById("message");
 
-  if (!username || !password) {
-    message.innerText = "Isi Username & Password!";
+  if (!user || !pass) {
+    message.innerText = "Username & Password wajib diisi!";
     message.style.color = "red";
     return;
   }
 
-  if (!key) {
-    message.innerText = "Key tidak ditemukan, ulangi login dengan key!";
-    message.style.color = "red";
-    return;
-  }
+  // simpan akun di localStorage
+  localStorage.setItem("username", user);
+  localStorage.setItem("password", pass);
 
-  // Simpan user + password ke key di Firebase
-  firebase.database().ref("keys/" + key).update({
-    user: { username, password }
-  }).then(() => {
-    localStorage.removeItem("tempKey");
-    localStorage.setItem("loggedInUser", username);
-    message.innerText = "✅ User berhasil dibuat! Login otomatis...";
-    message.style.color = "lightgreen";
-    setTimeout(() => window.location.href = "success.html", 1200);
-  }).catch(err => {
-    console.error(err);
-    message.innerText = "⚠️ Gagal menyimpan user!";
-    message.style.color = "red";
-  });
+  // hapus key agar tidak bisa dipakai ulang
+  localStorage.removeItem("tempKey");
+  firebase.database().ref("keys/" + key).remove();
+
+  message.innerText = "✅ Akun berhasil dibuat! Silakan login.";
+  message.style.color = "lightgreen";
+
+  document.getElementById("registerBox").style.display = "none";
+  document.getElementById("userLoginBox").style.display = "block";
 }
 
-// ============== LOGIN DENGAN USERNAME & PASSWORD ==============
+// Fungsi login pakai user
 function loginUser() {
-  const username = document.getElementById("loginUser").value.trim();
-  const password = document.getElementById("loginPass").value.trim();
+  const user = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
   const message = document.getElementById("message");
 
-  if (!username || !password) {
-    message.innerText = "Isi Username & Password!";
+  const savedUser = localStorage.getItem("username");
+  const savedPass = localStorage.getItem("password");
+
+  if (user === savedUser && pass === savedPass) {
+    message.innerText = "✅ Login berhasil!";
+    message.style.color = "lightgreen";
+
+    // tandai user login
+    localStorage.setItem("isLoggedIn", "true");
+
+    setTimeout(() => {
+      window.location.href = "success.html";
+    }, 1200);
+  } else {
+    message.innerText = "❌ Username atau Password salah!";
     message.style.color = "red";
-    return;
   }
-
-  firebase.database().ref("keys").once("value").then(snapshot => {
-    let found = false;
-
-    snapshot.forEach(child => {
-      const data = child.val();
-      if (data.user && data.user.username === username && data.user.password === password) {
-        found = true;
-        localStorage.setItem("loggedInUser", username);
-        message.innerText = "✅ Login sukses!";
-        message.style.color = "lightgreen";
-        setTimeout(() => window.location.href = "success.html", 1000);
-      }
-    });
-
-    if (!found) {
-      message.innerText = "❌ Username / Password salah!";
-      message.style.color = "red";
-    }
-  });
 }
 
-// ============== LOGOUT ==============
+// Fungsi logout
 function logout() {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "index.html";
+  localStorage.removeItem("isLoggedIn"); // hapus status login
+  window.location.href = "index.html";   // balik ke halaman login
 }
 
-// ============== AUTO LOGIN ==============
-window.onload = function() {
-  const savedUser = localStorage.getItem("loggedInUser");
-  if (savedUser) {
-    window.location.href = "success.html";
+// Auto check: kalau sudah login → biarkan di success.html
+window.onload = function () {
+  if (window.location.pathname.includes("success.html")) {
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      // kalau belum login tapi coba akses success.html → balikin ke index
+      window.location.href = "index.html";
+    }
   }
 };
