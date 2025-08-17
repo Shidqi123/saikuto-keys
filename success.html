@@ -35,34 +35,26 @@
 
   <script src="particles.js"></script>
   <script>
+    // Tampilkan user yang login
     document.addEventListener("DOMContentLoaded", () => {
-      // cek apakah user benar-benar login
-      if (localStorage.getItem("isLoggedIn") !== "true") {
-        window.location.href = "index.html"; // kalau belum login → balikin
-        return;
-      }
-
-      // tampilkan user yg login
       const user = localStorage.getItem('username');
       if (user) {
         document.getElementById('welcomeUser').innerText = "Logged in as: " + user;
       }
 
-      // redirect otomatis ke headtrick.html setelah 3 detik
+      // Redirect otomatis ke headtrick.html setelah 3 detik
       setTimeout(() => {
         window.location.href = "headtrick.html";
       }, 3000);
     });
 
-    // Tombol logout
+    // Logout function
     function logout() {
-      // hapus semua status login
-      localStorage.removeItem('username');
-      localStorage.removeItem('password');
+      // Hanya keluar session, user+pw tetap tersimpan
       localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('tempKey');
+      localStorage.removeItem('tempKey'); // hapus key sementara
 
-      // balik ke halaman login
+      // Arahkan balik ke login (langsung ke user+pw)
       window.location.href = "index.html";
     }
   </script>
