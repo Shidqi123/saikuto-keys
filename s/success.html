@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Headtrick Success</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Animasi Loading */
+    .loading-text {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="success-box">
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Welcome to Headtrick!</h1>
+    <p id="welcomeUser"></p>
+    <p class="loading-text">Loading Headtrick...</p>
+    <button class="glow-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <script src="particles.js"></script>
+  <script>
+    // Tampilkan user yang login
+    document.addEventListener("DOMContentLoaded", () => {
+      const user = localStorage.getItem('username');
+      if (user) {
+        document.getElementById('welcomeUser').innerText = "Logged in as: " + user;
+      }
+
+      // 🔥 Redirect otomatis ke headtrick.html setelah 3 detik
+      setTimeout(() => {
+        window.location.href = "headtrick.html";
+      }, 3000);
+    });
+
+    // Logout function
+    function logout() {
+      // Jangan hapus key, cukup logout user saja
+      localStorage.removeItem('username');
+      localStorage.removeItem('password');
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
